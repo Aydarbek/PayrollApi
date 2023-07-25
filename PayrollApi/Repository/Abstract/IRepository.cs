@@ -4,9 +4,9 @@ namespace PayrollApi.Repository.Abstract;
 
 public interface IRepository<TEntity> : IAsyncDisposable
 {
-    Task<TEntity> Get(long id, CancellationToken token);
-    Task<List<TEntity>> GetAll(CancellationToken token);
-    Task Add(TEntity entity, CancellationToken token);
+    Task<TEntity> Get(long id, CancellationToken token = default);
+    Task<List<TEntity>> GetAll(CancellationToken token = default);
+    Task Add(TEntity entity, CancellationToken token = default);
     void Update(TEntity entity);
-    Task Save(CancellationToken token);
+    Task Save(CancellationToken token = default);
 }
