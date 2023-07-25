@@ -5,6 +5,7 @@ namespace PayrollApi.Repository.Contexts;
 
 public class PayrollContext : DbContext
 {
+    public virtual DbSet<Payroll> Payrolls { get; set; }
     public PayrollContext()
     {
     }
