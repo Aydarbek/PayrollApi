@@ -1,41 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayrollApi.Models;
+using PayrollApi.Models.Dtos;
 using PayrollApi.Repository.Abstract;
+using PayrollApi.Services.Abstract;
 
 namespace PayrollApi.Controllers;
 
 public class PayrollsController : Controller
 {
     private readonly IRepository<Payroll> _payrolls;
+    private readonly IPayrollService _payrollService;
 
-    public PayrollsController(IRepository<Payroll> payrolls)
+
+    public PayrollsController(IRepository<Payroll> payrolls, IPayrollService payrollService)
     {
         _payrolls = payrolls;
+        this._payrollService = payrollService;
     }
 
     [HttpGet]
-    public async Task<List<Payroll>> GetAll()
+    public async Task<List<PayrollReadDto>> GetAll()
     {
-        return await _payrolls.GetAll();
+        return await _payrollService.GetAll();
     }
 
     [HttpGet]
-    public async Task<Payroll> Get(long id)
+    public async Task<PayrollReadDto> Get(long id)
     {
-        return await _payrolls.Get(id);
+        return await _payrollService.Get(id);
     }
 
     [HttpPost]
-    public async Task Add([FromBody] Payroll payroll)
+    public async Task Add([FromBody] PayrollWriteDto model)
     {
-        await _payrolls.Add(payroll);
-        await _payrolls.Save();
+        await _payrollService.Create(model);
     }
 
     [HttpPut]
-    public async Task Update([FromBody] Payroll payroll)
+    public async Task Update(long id, [FromBody] PayrollWriteDto model)
     {
-        _payrolls.Update(payroll);
-        await _payrolls.Save();
+        await _payrollService.Update(id, model);
+    }
+
+    [HttpDelete]
+    public async Task Delete(long id)
+    {
+        await _payrollService.Delete(id);
     }
 }

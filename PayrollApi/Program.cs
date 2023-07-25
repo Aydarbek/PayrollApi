@@ -3,6 +3,8 @@ using PayrollApi.Models;
 using PayrollApi.Repository.Abstract;
 using PayrollApi.Repository.Concrete;
 using PayrollApi.Repository.Contexts;
+using PayrollApi.Services.Abstract;
+using PayrollApi.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,10 @@ builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("mssql")).EnableSensitiveDataLogging()
 );
 
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IRepository<Payroll>, PayrollRepository>();
+builder.Services.AddTransient<IPayrollService, PayrollService>();
 
 var app = builder.Build();
 
