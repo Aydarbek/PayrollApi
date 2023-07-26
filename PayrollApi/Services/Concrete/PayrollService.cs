@@ -3,6 +3,7 @@ using System.Text;
 using AutoMapper;
 using CsvHelper;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using PayrollApi.Models;
 using PayrollApi.Models.Dtos;
 using PayrollApi.Repository.Abstract;
@@ -15,15 +16,13 @@ public class PayrollService : IPayrollService
     private readonly IRepository<Payroll> _repo;
     private readonly IMapper _mapper;
     private readonly ILogger<PayrollService> _logger;
-    private const string ReportsDirectory = "Reports/";
-    private const string ReportPrefix = "Payrolls";
-    private const string DateFormat = "yyyy-MM-dd_hh-mm-ss";
-    private const string FileFormat = ".csv";
+    private readonly ReportSettings _settings;
 
-    public PayrollService(IRepository<Payroll> repo, IMapper mapper, ILogger<PayrollService> logger)
+    public PayrollService(IRepository<Payroll> repo, IMapper mapper, IOptions<ReportSettings> settings, ILogger<PayrollService> logger)
     {
         _repo = repo;
         _mapper = mapper;
+        _settings = settings.Value;
         _logger = logger;
     }
     
@@ -120,20 +119,20 @@ public class PayrollService : IPayrollService
         }
     }
 
-    private static string GetFileName()
+    private string GetFileName()
     {
         var sb = new StringBuilder();
-        sb.Append(ReportsDirectory)
-            .Append(ReportPrefix).Append('_')
-            .Append(DateTime.Now.ToString(DateFormat))
-            .Append(FileFormat);
+        sb.Append(_settings.ReportsDirectory)
+            .Append(_settings.ReportPrefix).Append('_')
+            .Append(DateTime.Now.ToString(_settings.DateFormat))
+            .Append(_settings.FileFormat);
 
         return sb.ToString();
     }
 
-    private static IFileInfo GetFileInfo(string filePath)
+    private IFileInfo GetFileInfo(string filePath)
     {
-        var fileProvider = new PhysicalFileProvider(Path.GetFullPath(ReportsDirectory));
+        var fileProvider = new PhysicalFileProvider(Path.GetFullPath(_settings.ReportsDirectory));
         return fileProvider.GetFileInfo(Path.GetFileName(filePath));
     }
 }

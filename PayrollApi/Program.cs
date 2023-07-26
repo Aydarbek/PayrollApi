@@ -22,6 +22,7 @@ builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IRepository<Payroll>, PayrollRepository>();
 builder.Services.AddTransient<IPayrollService, PayrollService>();
+builder.Services.Configure<ReportSettings>(opt => builder.Configuration.GetSection("ReportSettings").Bind(opt));
 
 var app = builder.Build();
 
