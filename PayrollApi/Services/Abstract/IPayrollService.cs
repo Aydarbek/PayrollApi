@@ -1,4 +1,5 @@
-﻿using PayrollApi.Models;
+﻿using Microsoft.Extensions.FileProviders;
+using PayrollApi.Models;
 using PayrollApi.Models.Dtos;
 
 namespace PayrollApi.Services.Abstract;
@@ -10,4 +11,5 @@ public interface IPayrollService
     Task Create(PayrollWriteDto model, CancellationToken token = default);
     Task Update(long id, PayrollWriteDto model, CancellationToken token = default);
     Task Delete(long id, CancellationToken token = default);
+    Task<IFileInfo> GetCsvReport(CancellationToken token = default);
 }

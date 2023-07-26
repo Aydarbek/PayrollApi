@@ -1,6 +1,4 @@
-﻿using PayrollApi.Models;
-
-namespace PayrollApi.Repository.Abstract;
+﻿namespace PayrollApi.Repository.Abstract;
 
 public interface IRepository<TEntity> : IAsyncDisposable
 {
