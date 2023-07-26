@@ -4,7 +4,9 @@ using PayrollApi.Services.Abstract;
 
 namespace PayrollApi.Controllers;
 
-public class PayrollsController : Controller
+[ApiController]
+[Route("api/[controller]/[action]")]
+public class PayrollsController : ControllerBase
 {
     private readonly IPayrollService _payrollService;
 
@@ -20,7 +22,7 @@ public class PayrollsController : Controller
         return await _payrollService.GetAll();
     }
 
-    [HttpGet]
+    [HttpGet("{id:long}")]
     public async Task<PayrollReadDto> Get(long id)
     {
         return await _payrollService.Get(id);
@@ -40,13 +42,13 @@ public class PayrollsController : Controller
         await _payrollService.Create(model);
     }
 
-    [HttpPut]
+    [HttpPut("{id:long}")]
     public async Task Update(long id, [FromBody] PayrollWriteDto model)
     {
         await _payrollService.Update(id, model);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:long}")]
     public async Task Delete(long id)
     {
         await _payrollService.Delete(id);

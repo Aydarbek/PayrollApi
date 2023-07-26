@@ -17,6 +17,6 @@ public class PayrollProfile : Profile
         
         CreateMap<PayrollWriteDto, Payroll>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember, dstMember)
-                => srcMember != null && dstMember != null));
+                => srcMember != null));
     }
 }

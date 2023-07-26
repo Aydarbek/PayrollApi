@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using PayrollApi.Models;
 using PayrollApi.Repository.Abstract;
 using PayrollApi.Repository.Concrete;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new OpenApiInfo{Title = "Payroll API", Version = "v1"}));
 builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("mssql")).EnableSensitiveDataLogging()
 );
@@ -30,7 +31,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Payroll API V1"));
 }
 
 app.UseHttpsRedirection();
@@ -39,11 +40,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseEndpoints(endpoints =>
+/*app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "api/{controller}/{action}/{id?}");
-});
+});*/
 
 app.Run();
